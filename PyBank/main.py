@@ -63,7 +63,6 @@ with open(budget_data2_csv, newline="") as csvfile:
 
         # Comparison conditional if the current month is not already in the total_months list
 
-
         # count total revenue
         total_revenue = total_revenue + int(row[1])
 
