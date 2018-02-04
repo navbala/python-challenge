@@ -2,6 +2,7 @@
 import os
 import csv
 import datetime
+import numpy as np
 
 # Set path for file
 budget_data1_csv = os.path.join("C:/Users/navba/Desktop/GitHub/python-challenge/PyBank/", "budget_data_1.csv")
@@ -21,7 +22,10 @@ total_revenue = 0
 month_dict = {}
 
 # Create a list to hold average revenue differences
-revenue_chg = []
+rev_delta = 0
+avg_rev_delta = 0
+rev_list = []
+rev_deltas = []
 
 # Open the budget_data_1 csv
 with open(budget_data1_csv, newline="") as csvfile:
@@ -44,8 +48,8 @@ with open(budget_data1_csv, newline="") as csvfile:
 
         # Convert the data string into a date element and add the to data date_list
         d = datetime.datetime.strptime(row[0], "%b-%y").date()
-        print(d)
         date_list.append(d)
+        #print(date_list)
 
 
 
@@ -57,7 +61,20 @@ with open(budget_data1_csv, newline="") as csvfile:
         total_revenue = total_revenue + int(row[1])
 
         # Coditional statement for adding revnue deltas to a list aadd the dictionary to hold month delta/revenue values
+        cur_rev = int(row[1])
+        rev_list.append(cur_rev)
 
+        #print(rev_list)
+
+for i in range(len(rev_list)-1):
+    rev_delta = rev_list[i+1] - (rev_list[i])
+    rev_deltas.append(rev_delta)
+
+print(rev_deltas)
+# get mean
+avg_rev_delta = np.mean(rev_deltas)
+
+#print(str(len(date_list)))
 
 # Open the budget_data_2 csv
 with open(budget_data2_csv, newline="") as csvfile:
@@ -72,6 +89,11 @@ with open(budget_data2_csv, newline="") as csvfile:
         ## Count total months by splitting first row elements and comparing to other months
         ## It will only count if the month is unique
 
+        # Convert the data string into a date element and add the to data date_list
+        d = datetime.datetime.strptime(row[0], "%b-%Y").date()
+        date_list.append(d)
+
+
         # Isolate the sub-elements within the row elements for comparison
         #date_list = row[0].split("-")
         #month = date_list[0]
@@ -83,7 +105,18 @@ with open(budget_data2_csv, newline="") as csvfile:
         # count total revenue
         total_revenue = total_revenue + int(row[1])
 
-print(date_list)
+        ## Coditional statement for adding revnue deltas to a list aadd the dictionary to hold month delta/revenue values
+        #cur_rev = int(row[1])
+        #rev_list.append(cur_rev)
+
+
+#print(rev_list)
+
+
+# Calculate average revenue delta
+#avg_rev_delta = np.mean(rev_deltas)
+
+#print(date_list)
 
 # Print outputs
 print()
@@ -91,5 +124,6 @@ print("Financial Analysis")
 print("-----------------------------")
 print("Total Months: " + str(len(date_list))) #suppose to be 12 (budget 1) + 86 (budget 2) = 98 total months
 print("Total Revenue: $" + str(total_revenue))
+print("Average Revenue Change: $" + str(avg_rev_delta))
 
 # Write the outputs to another .csv file
