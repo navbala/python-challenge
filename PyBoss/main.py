@@ -101,13 +101,15 @@ with open(emp_dataset_csv, newline="") as csvfile:
 
 # Zip the different lists together
 zipped_list = zip(EmpID, FirstName, LastName, DOB, SSN, State)
-#print(zipped_list)
+#print(list(zipped_list))
 
 # Set variable for output file
 output_file = os.path.join("output.csv")
 
-#  Open the output file
+# Open the file using "write" mode. Specify the variable to hold the contents
 with open(output_file, "w", newline="") as datafile:
+
+    # Initialize csv.writer
     writer = csv.writer(datafile)
 
     # Write the header row
