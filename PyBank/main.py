@@ -5,30 +5,29 @@ import datetime
 import numpy as np
 
 # Set path for file
-budget_data1_csv = os.path.join("C:/Users/navba/Desktop/GitHub/python-challenge/PyBank/", "budget_data_1.csv")
-budget_data2_csv = os.path.join("C:/Users/navba/Desktop/GitHub/python-challenge/PyBank/", "budget_data_2.csv")
+dataset1_csv = os.path.join("C:/Users/navba/Desktop/GitHub/python-challenge/PyBank/", "budget_data_1.csv")
+dataset2_csv = os.path.join("C:/Users/navba/Desktop/GitHub/python-challenge/PyBank/", "budget_data_2.csv")
 #^^^ Maybe getcwd instead??
+
 
 # Create list for total months
 date_list = []
 
-# Create a list to hold coverted dates
-
-
 # Create variable to store total revenue value
 total_revenue = 0
 
-# Create dictionry for months and corresponding Count
-month_dict = {}
+# Create dictionary for months and corresponding Count
+month_rev= {}
 
-# Create a list to hold average revenue differences
+# Create variables and lists pertaining to revenue data calculations
 rev_delta = 0
 avg_rev_delta = 0
 rev_list = []
 rev_deltas = []
 
-# Open the budget_data_1 csv
-with open(budget_data1_csv, newline="") as csvfile:
+
+# Open and read the first data set
+with open(dataset1_csv, newline="") as csvfile:
     csvreader = csv.reader(csvfile, delimiter=",")
 
     # skip the header rows
@@ -37,93 +36,95 @@ with open(budget_data1_csv, newline="") as csvfile:
     # Loop through all rows to identify the month
     for row in csvreader:
 
-        ## Count total months by splitting first row elements and comparing to other months
-        ## It will only count if the month is unique
+        # Convert the data string into a date element and add the to date_list
+        d = datetime.datetime.strptime(row[0], "%b-%y").date()
 
-        # Isolate the sub-elements within the row elements for comparison
-        #date_list = row[0].split("-")
-        #month = date_list[0]
-        #date = date_list[1]
-        #year = date_list[2]
+        # Conditional statement for adding revnue deltas to a list aadd the dictionary to hold month delta/revenue values
+        cur_rev = int(row[1])
+
+        # Count total revenue
+        total_revenue = total_revenue + cur_rev
+
+        # Add date and rev to month_rev dictionary
+        month_rev[d] = cur_rev
+
+
+# Open and read the second data set
+with open(dataset2_csv, newline="") as csvfile:
+    csvreader = csv.reader(csvfile, delimiter=",")
+
+    # skip the header rows
+    next(csvfile)
+
+    # Loop through all rows to identify the month
+    for row in csvreader:
+
+        # Conditional statement for adding revnue deltas to a list aadd the dictionary to hold month delta/revenue values
+        cur_rev = int(row[1])
 
         # Convert the data string into a date element and add the to data date_list
-        d = datetime.datetime.strptime(row[0], "%b-%y").date()
-        date_list.append(d)
-        #print(date_list)
+        d = datetime.datetime.strptime(row[0], "%b-%Y").date()
 
+        # Check to see if date it already in date_list from running through first dataset
+        ## If it exts, add the value of the rev to the existing value for the date key. Else, append to the dict.
+        if d in month_rev:
+            month_rev[d] += cur_rev
+        else:
+            month_rev[d] = cur_rev
 
-
-        # Comparison conditional if current month not already in the total_months list
-        #if month not in total_months:
-        #    total_months.append(month)
-
-        # count total revenue
+        # Count total revenue
         total_revenue = total_revenue + int(row[1])
 
-        # Coditional statement for adding revnue deltas to a list aadd the dictionary to hold month delta/revenue values
-        cur_rev = int(row[1])
-        rev_list.append(cur_rev)
 
-        #print(rev_list)
+# Order the month_rev dict and create the dictionary for the ordered list of tuples
+ordered = sorted(month_rev.items(), key = lambda t:t[0])
+ordered_dict = {}
 
+# Add the tuple pairs comprising the ordered list into a new dictionary
+for (x,y) in ordered:
+    ordered_dict[x] = y
+
+# Append the date keys from the ordered_dict to a new date list and a new revenue list
+for date in ordered_dict:
+    date_list.append(date)
+    rev_list.append(ordered_dict[date])
+
+# Calculate the revenue deltas between months and append the values to new revenue deltas list
 for i in range(len(rev_list)-1):
     rev_delta = rev_list[i+1] - (rev_list[i])
     rev_deltas.append(rev_delta)
 
-print(rev_deltas)
-# get mean
+# Calculate the mean from rev_deltas list
 avg_rev_delta = np.mean(rev_deltas)
 
-#print(str(len(date_list)))
+# Create another dictionary by zipping the dates list and rev_deltas
+## Add a zero value in the first index of the list so that the first date of the dict has no deltas
+rev_deltas.insert(0, 0)
 
-# Open the budget_data_2 csv
-with open(budget_data2_csv, newline="") as csvfile:
-    csvreader = csv.reader(csvfile, delimiter=",")
+# Zip up the date_list and rev_deltas list to make a dictionary with the months and correspoding revenue deltas
+date_rev_dict = dict(zip(date_list, rev_deltas))
 
-    # skip the header rows
-    next(csvfile)
+# Retrieve the max values in the date_rev_dict to identify the date with greatest revenue increase
+## Format the datetime month-year
+max_date = max(date_rev_dict, key=date_rev_dict.get)
+max_date_formatted = max_date.strftime("%b-%y")
+max_rev = date_rev_dict[max_date]
 
-    # Loop through all rows to identify the month
-    for row in csvreader:
-
-        ## Count total months by splitting first row elements and comparing to other months
-        ## It will only count if the month is unique
-
-        # Convert the data string into a date element and add the to data date_list
-        d = datetime.datetime.strptime(row[0], "%b-%Y").date()
-        date_list.append(d)
-
-
-        # Isolate the sub-elements within the row elements for comparison
-        #date_list = row[0].split("-")
-        #month = date_list[0]
-        #date = date_list[1]
-        #year = date_list[2]
-
-        # Comparison conditional if the current month is not already in the total_months list
-
-        # count total revenue
-        total_revenue = total_revenue + int(row[1])
-
-        ## Coditional statement for adding revnue deltas to a list aadd the dictionary to hold month delta/revenue values
-        #cur_rev = int(row[1])
-        #rev_list.append(cur_rev)
+# Retrieve the max values in the date_rev_dict to identify the date with greatest revenue decrease
+## Format the datetime month-year
+min_date = min(date_rev_dict, key=date_rev_dict.get)
+min_date_formatted = min_date.strftime("%b-%y")
+min_rev = date_rev_dict[min_date]
 
 
-#print(rev_list)
-
-
-# Calculate average revenue delta
-#avg_rev_delta = np.mean(rev_deltas)
-
-#print(date_list)
-
-# Print outputs
+# Print outputs to terminal
 print()
 print("Financial Analysis")
 print("-----------------------------")
-print("Total Months: " + str(len(date_list))) #suppose to be 12 (budget 1) + 86 (budget 2) = 98 total months
+print("Total Months: " + str(len(month_rev)))
 print("Total Revenue: $" + str(total_revenue))
-print("Average Revenue Change: $" + str(avg_rev_delta))
+print("Average Revenue Change: $" + str(int(avg_rev_delta)))
+print("Greatest Increase in Revenue: " + str(max_date_formatted) + " " + "($" + str(max_rev) + ")")
+print("Greatest Decrease in Revenue: " + str(min_date_formatted) + " " + "($" + str(min_rev) + ")")
 
-# Write the outputs to another .csv file
+# Write the outputs to .csv file
