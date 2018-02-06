@@ -3,9 +3,12 @@ import os
 import csv
 import numpy as np
 
-## Set path for file
-dataset_test_csv = os.path.join("budget_data_1.csv")
-dataset_main_csv = os.path.join("budget_data_2.csv")
+## Set path for dataset file
+# Sample set csv path -
+# dataset_csv = os.path.join("budget_data_1.csv")
+
+# Main test set csv path -
+dataset_csv = os.path.join("budget_data_2.csv")
 
 ## Set up initial variables and lists/dicts
 # Create list for total months
@@ -24,14 +27,15 @@ rev_list = []
 rev_deltas = []
 
 
-## Open and read the first data set
-with open(dataset_main_csv, newline="") as csvfile:
+## Open and read the data set
+with open(dataset_csv, newline="") as csvfile:
     csvreader = csv.reader(csvfile, delimiter=",")
 
-    # skip the header rows
+    # skip the header row
     next(csvfile)
 
-    # Loop through all rows to identify the month
+    # Loop through all rows in csv file to set veriable values, calculate total revenue,
+    # and append to the initial date/revenue dict
     for row in csvreader:
 
         # Convert the data string into a date element and add the to date_list
@@ -47,7 +51,8 @@ with open(dataset_main_csv, newline="") as csvfile:
         date_rev_dict[date] = cur_rev
 
 ## Perform post csv-reading calucations and procedures
-# Append the date keys from the ordered_dict to a new date list and a new revenue list
+# Append the date keys from the ordered_dict to a new date list and append the corresponding
+# values to new revenue list
 for date in date_rev_dict:
     date_list.append(date)
     rev_list.append(date_rev_dict[date])
@@ -57,7 +62,8 @@ for i in range(len(rev_list)-1):
     rev_delta = rev_list[i+1] - (rev_list[i])
     rev_deltas.append(rev_delta)
 
-# Add a zero value in the first index of the list so that the first date of the new dict has no revenue delta
+# Add a zero value in the first index of the list so that the first date of the new dict
+# has no revenue delta
 rev_deltas.insert(0, 0)
 
 # Calculate the mean from rev_deltas list
@@ -95,7 +101,7 @@ with open(output_path, 'w', newline='') as csvfile:
     # Initialize csv.writer
     csvwriter = csv.writer(csvfile, delimiter=',')
 
-    # Write to the rows
+    # Write the analysis to the rows
     csvwriter.writerow(["Financial Analysis"])
     csvwriter.writerow(["-------------------------------------------------------"])
     csvwriter.writerow(["Total Months: ", "", str(len(date_rev_dict))])
