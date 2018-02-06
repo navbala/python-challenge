@@ -93,7 +93,7 @@ print("Greatest Decrease in Revenue: " + str(min_date) + " " + "($" + str(min_re
 
 ## Write the outputs to .csv file
 # Specify the file to write to
-output_path = os.path.join('output.csv')
+output_path = os.path.join('output.txt')
 
 # Open the file using "write" mode. Specify the variable to hold the contents
 with open(output_path, 'w', newline='') as csvfile:
@@ -101,11 +101,11 @@ with open(output_path, 'w', newline='') as csvfile:
     # Initialize csv.writer
     csvwriter = csv.writer(csvfile, delimiter=',')
 
-    # Write the analysis to the rows
+    # Write the analysis to rows
     csvwriter.writerow(["Financial Analysis"])
-    csvwriter.writerow(["-------------------------------------------------------"])
-    csvwriter.writerow(["Total Months: ", "", str(len(date_rev_dict))])
-    csvwriter.writerow(["Total Revenue: ", "", "$" + str(total_revenue)])
-    csvwriter.writerow(["Average Revenue Change: $", "", "$" + str(int(avg_rev_delta))])
-    csvwriter.writerow(["Greatest Increase in Revenue: ", "", str(max_date), "", "$" + str(max_rev)])
-    csvwriter.writerow(["Greatest Decrease in Revenue: ", "", str(min_date), "", "$" + str(min_rev)])
+    csvwriter.writerow(["-----------------------------------------------"])
+    csvwriter.writerow(["Total Months: " + str(len(date_rev_dict))])
+    csvwriter.writerow(["Total Revenue: " + str(total_revenue)])
+    csvwriter.writerow(["Average Revenue Change: $" + str(int(avg_rev_delta))])
+    csvwriter.writerow(["Greatest Increase in Revenue: " + str(max_date) + " " + "($" + str(max_rev) + ")"])
+    csvwriter.writerow(["Greatest Decrease in Revenue: " + str(min_date) + " " + "($" + str(min_rev) + ")"])
