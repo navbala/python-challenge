@@ -51,8 +51,8 @@ with open(dataset_csv, newline="") as csvfile:
         date_rev_dict[date] = cur_rev
 
 ## Perform post csv-reading calucations and procedures
-# Append the date keys from the ordered_dict to a new date list and append the corresponding
-# values to new revenue list
+# Append the date keys from the date_rev_dict to a new date list and append the corresponding
+# revenue values to new revenue list
 for date in date_rev_dict:
     date_list.append(date)
     rev_list.append(date_rev_dict[date])
@@ -91,7 +91,7 @@ print("Average Revenue Change: $" + str(int(avg_rev_delta)))
 print("Greatest Increase in Revenue: " + str(max_date) + " " + "($" + str(max_rev) + ")")
 print("Greatest Decrease in Revenue: " + str(min_date) + " " + "($" + str(min_rev) + ")")
 
-## Write the outputs to .csv file
+## Write the outputs to .txt file
 # Specify the file to write to
 output_path = os.path.join('output.txt')
 
