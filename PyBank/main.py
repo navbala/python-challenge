@@ -4,7 +4,8 @@ import csv
 import numpy as np
 
 ## Set path for file
-dataset1_csv = os.path.join("C:/Users/navba/Desktop/GitHub/python-challenge/PyBank/", "budget_data_2.csv")
+dataset_test_csv = os.path.join("budget_data_1.csv")
+dataset_main_csv = os.path.join("budget_data_2.csv")
 
 ## Set up initial variables and lists/dicts
 # Create list for total months
@@ -24,7 +25,7 @@ rev_deltas = []
 
 
 ## Open and read the first data set
-with open(dataset1_csv, newline="") as csvfile:
+with open(dataset_main_csv, newline="") as csvfile:
     csvreader = csv.reader(csvfile, delimiter=",")
 
     # skip the header rows
