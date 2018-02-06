@@ -3,7 +3,11 @@ import os
 import csv
 from datetime import datetime
 
-# importing csv data set
+## Set path for dataset file
+# Sample set csv path -
+# dataset_csv = os.path.join("employee_data1.csv")
+
+# Main test set csv path -
 emp_dataset_csv = os.path.join("employee_data2.csv")
 
 # Lists to store data:
@@ -14,7 +18,7 @@ DOB = []
 SSN = []
 State = []
 
-# Copying us_states abbv data
+# Create dict to hold full state names and their corresponding abbreviations
 state_abbrev_dict = {
     'Alabama': 'AL',
     'Alaska': 'AK',
@@ -69,6 +73,7 @@ state_abbrev_dict = {
 }
 
 
+## Open and read the data set
 with open(emp_dataset_csv, newline="") as csvfile:
     csvreader= csv.reader(csvfile, delimiter=",")
 
@@ -77,7 +82,7 @@ with open(emp_dataset_csv, newline="") as csvfile:
 
     for row in csvreader:
 
-        # Adding EmpID
+        # Append EmpID value in csv file to EmpID list
         EmpID.append(row[0])
 
         # Split full name into first and last names and add them separate lists
@@ -85,25 +90,27 @@ with open(emp_dataset_csv, newline="") as csvfile:
         FirstName.append(fullName[0])
         LastName.append(fullName[1])
 
-        # Convert DOB from YYYY-MM-DD to MM/DD/YYYY format
+        # Convert DOB from YYYY-MM-DD to MM/DD/YYYY format, then append to DOB list
         csv_DOB = datetime.strptime(row[2], "%Y-%m-%d").strftime("%m/%d/%Y")
         DOB.append(csv_DOB)
 
-        # Convert SSN by grabbing the last 4 digits and adding prefix ***-**-
+        # Convert SSN by grabbing the last 4 digits and adding prefix ***-**-,
+        # then append to SSN list
         csv_SSN = row[3]
         csv_SSN = csv_SSN[-4:]
         SSN.append("***-**-" + csv_SSN)
 
-        # Convert from full state name to abbreviated name via checking against state dictionary
+        # Convert from full state name to abbreviated name via checking against
+        # state dictionary, then append to State list
         csv_State = row[4]
         State.append(state_abbrev_dict[csv_State])
 
 
-# Zip the different lists together
+# Zip the different lists together (prepping for output)
 zipped_list = zip(EmpID, FirstName, LastName, DOB, SSN, State)
-#print(list(zipped_list))
 
-# Set variable for output file
+## Write the outputs to .csv file
+# Specify the file to write to
 output_file = os.path.join("output.csv")
 
 # Open the file using "write" mode. Specify the variable to hold the contents
