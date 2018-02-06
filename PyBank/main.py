@@ -7,7 +7,6 @@ import numpy as np
 # Set path for file
 dataset1_csv = os.path.join("C:/Users/navba/Desktop/GitHub/python-challenge/PyBank/", "budget_data_1.csv")
 dataset2_csv = os.path.join("C:/Users/navba/Desktop/GitHub/python-challenge/PyBank/", "budget_data_2.csv")
-#^^^ Maybe getcwd instead??
 
 
 # Create list for total months
@@ -16,7 +15,7 @@ date_list = []
 # Create variable to store total revenue value
 total_revenue = 0
 
-# Create dictionary for months and corresponding Count
+# Create dictionary for months and corresponding revenue
 month_rev= {}
 
 # Create variables and lists pertaining to revenue data calculations
@@ -127,4 +126,21 @@ print("Average Revenue Change: $" + str(int(avg_rev_delta)))
 print("Greatest Increase in Revenue: " + str(max_date_formatted) + " " + "($" + str(max_rev) + ")")
 print("Greatest Decrease in Revenue: " + str(min_date_formatted) + " " + "($" + str(min_rev) + ")")
 
-# Write the outputs to .csv file
+## Write the outputs to .csv file
+# Specify the file to write to
+output_path = os.path.join('output.csv')
+
+# Open the file using "write" mode. Specify the variable to hold the contents
+with open(output_path, 'w', newline='') as csvfile:
+
+    # Initialize csv.writer
+    csvwriter = csv.writer(csvfile, delimiter=',')
+
+    # Write the columns)
+    csvwriter.writerow(["Financial Analysis"])
+    csvwriter.writerow(["-------------------------------------------------------"])
+    csvwriter.writerow(["Total Months: ", "", str(len(month_rev))])
+    csvwriter.writerow(["Total Revenue: ", "", "$" + str(total_revenue)])
+    csvwriter.writerow(["Average Revenue Change: $", "", "$" + str(int(avg_rev_delta))])
+    csvwriter.writerow(["Greatest Increase in Revenue: ", "", str(max_date_formatted), "", "$" + str(max_rev)])
+    csvwriter.writerow(["Greatest Decrease in Revenue: ", "", str(min_date_formatted), "", "$" + str(min_rev)])
